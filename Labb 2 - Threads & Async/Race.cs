@@ -12,7 +12,6 @@ namespace Labb_2___Threads___Async
     public class Race
     {
         //private static List<Ships> ships = new List<Ships>();
-
         public static void StartRace(List<Ships> ships)
         {
             Console.WriteLine("Välkommen till Star Trek Podracing!" +
@@ -22,14 +21,18 @@ namespace Labb_2___Threads___Async
             Thread.Sleep(2000);
             Console.WriteLine("2...");
             Thread.Sleep(2000);
-            Console.WriteLine("1...Kör");
+            Console.WriteLine("1...");
+            Thread.Sleep(1000);
+            Console.WriteLine("KÖR!!!!");
             Console.WriteLine("Tryck ENTER för att få uppdateringar :)");
 
             List<Thread> threads = new List<Thread>();
+            Stopwatch stopwatch = Stopwatch.StartNew(); // Start the stopwatch
 
             foreach (var ship in ships) 
-            { 
-                Thread thread = new Thread(ship.Drive);
+            {
+                ship.RaceStopwatch = stopwatch; // Assign the stopwatch to each ship
+                Thread thread = new Thread(ship.Drive); // Create a new thread for each ship
                 threads.Add(thread);
                 thread.Start();
             }
@@ -37,14 +40,19 @@ namespace Labb_2___Threads___Async
             Thread statusThread = new Thread(() => ListenForStatus(ships));
             statusThread.Start();
 
-            foreach (var thread in threads)
+            foreach (var thread in threads) // waitng for all ships to finish
             {
                 thread.Join();
             }
+
+            // Once all threads are finished, show final message
             Console.WriteLine("Alla Star-Trek skepp har gått i mål!");
+            Console.WriteLine("Programmet kommer att stängs av!");
+            Thread.Sleep(3000); 
+            Environment.Exit(0); 
         }
 
-        private static void ListenForStatus(List<Ships> ships)
+        private static void ListenForStatus(List<Ships> ships)  // method to show status of ships
         {
             while (true)
             {
@@ -52,7 +60,7 @@ namespace Labb_2___Threads___Async
 
                 if (input == "")
                 {
-                    Console.WriteLine("\nSTATUSUPPDATERING:");
+                    Console.WriteLine("\nSTATUS UPPDATERING:");
                     foreach (var ship in ships)
                     {
                         Console.WriteLine($"{ship.ShipName}: {ship.Distance:F1} m, {ship.Speed:F1} km/h");

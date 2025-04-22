@@ -8,6 +8,7 @@
             //t2.Name = "Millenium Falcon";
             //t3.Name = "TIE-Fighter";
 
+            // the contenders for my space race with name and thier start speed
             Ships t1 = new Ships("X-Wing", 120);
             Ships t2 = new Ships("Millenium-Falcon", 120);
             Ships t3 = new Ships("TIE-Fighter", 120);
