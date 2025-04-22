@@ -33,7 +33,7 @@ namespace Labb_2___Threads___Async
         {
             int time = 0;
 
-            while (Distance < 5000)    // Track distance 10 km
+            while (Distance < 10000)    // Track distance 10 km
             {
                 Thread.Sleep(1000);
                 Distance += Speed;  // move the ship forward with current speed
