@@ -78,12 +78,12 @@ namespace Labb_2___Threads___Async
                     Console.WriteLine($"\n{ShipName} tog skada av en asteroid! Reparerar skrov i 10 sekunder.");
                     Thread.Sleep(10000);
                 }
-                else if (chance >= 4 && chance <= 8)       // 5/50 = 10 %
+                else if (chance >= 4 && chance <= 9)       // 5/50 = 10 %
                 {
                     Console.WriteLine($"\n{ShipName} blev attackerad av rymdflugor! Spolar cockpiten i 5 sekunder.");
                     Thread.Sleep(5000);
                 }
-                else if (chance <= 9 && chance <= 18)  // 10/50 = 20%
+                else if (chance <= 10 && chance <= 19)  // 10/50 = 20%
                 {
                     Speed = Speed - 1; 
                     Console.WriteLine($"\n{ShipName} fick motorproblem! Hastighet sänkt till {Speed} km/h.");
