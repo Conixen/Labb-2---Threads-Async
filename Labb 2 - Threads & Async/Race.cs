@@ -12,7 +12,7 @@ namespace Labb_2___Threads___Async
     public class Race
     {
         //private static List<Ships> ships = new List<Ships>();
-        public static void StartRace(List<Ships> ships)
+        public static async Task StartRaceAsync(List<Ships> ships)
         {
             Console.WriteLine("Välkommen till Star Trek Podracing!" +
                 "\nRacet börjar om...");
@@ -26,29 +26,22 @@ namespace Labb_2___Threads___Async
             Console.WriteLine("KÖR!!!!");
             Console.WriteLine("Tryck ENTER för att få uppdateringar :)");
 
-            List<Thread> threads = new List<Thread>();
+            List<Task> shipTasks = new List<Task>();
             Stopwatch stopwatch = Stopwatch.StartNew(); // Start the stopwatch
 
-            foreach (var ship in ships) 
+            foreach (var ship in ships)
             {
-                ship.RaceStopwatch = stopwatch; // Assign the stopwatch to each ship
-                Thread thread = new Thread(ship.Drive); // Create a new thread for each ship
-                threads.Add(thread);
-                thread.Start();
+                ship.RaceStopwatch = stopwatch;
+                shipTasks.Add(Task.Run(() => ship.DriveAsync()));  // start the driveAsynce method for each ship
             }
+            Task statusTask = Task.Run(() => ListenForStatus(ships));
 
-            Thread statusThread = new Thread(() => ListenForStatus(ships));
-            statusThread.Start();
-
-            foreach (var thread in threads) // waitng for all ships to finish
-            {
-                thread.Join();
-            }
+            await Task.WhenAll(shipTasks);  // waitng for all ships to finish
 
             // Once all threads are finished, show final message
-            Console.WriteLine("Alla Star-Trek skepp har gått i mål!");
+            Console.WriteLine("\nAlla Star-Trek skepp har gått i mål!");
             Console.WriteLine("Programmet kommer att stängs av!");
-            Thread.Sleep(3000); 
+            Thread.Sleep(4000); 
             Environment.Exit(0); 
         }
 

@@ -29,19 +29,19 @@ namespace Labb_2___Threads___Async
             GoalReached = false;
             // RaceStopwatch = new Stopwatch();
         }
-        public void Drive()
+        public async Task DriveAsync()
         {
             int time = 0;
 
             while (Distance < 10000)    // Track distance 10 km
             {
-                Thread.Sleep(1000);
+                await Task.Delay(1000);
                 Distance += Speed;  // move the ship forward with current speed
 
                 time++;
                 if (time % 10 == 0) // every 10 seconds checks for random obstacles
                 {
-                    RandomObstacles();
+                    await RandomObstaclesAsync();
                 }
             }
 
@@ -62,7 +62,7 @@ namespace Labb_2___Threads___Async
             }
 
         }
-        public void RandomObstacles()   // method to simulate random obstacles
+        public async Task RandomObstaclesAsync()   // method to simulate random obstacles
         {
             int chance = random.Next(1, 51);    // random number between 1 and 50
 
@@ -71,24 +71,28 @@ namespace Labb_2___Threads___Async
                 if (chance == 1)    // 1/50 = 2%
                 {
                     Console.WriteLine($"\n{ShipName} har slut på bränsle! Omriktar till närmaste bränslestation. Väntar i 15 sekunder.");
-                    Thread.Sleep(15000);
                 }
                 else if (chance >= 2 && chance <= 3)       // 2/50 = 4% 
                 {
                     Console.WriteLine($"\n{ShipName} tog skada av en asteroid! Reparerar skrov i 10 sekunder.");
-                    Thread.Sleep(10000);
                 }
                 else if (chance >= 4 && chance <= 9)       // 5/50 = 10 %
                 {
                     Console.WriteLine($"\n{ShipName} blev attackerad av rymdflugor! Spolar cockpiten i 5 sekunder.");
-                    Thread.Sleep(5000);
                 }
                 else if (chance <= 10 && chance <= 19)  // 10/50 = 20%
                 {
                     Speed = Speed - 1; 
                     Console.WriteLine($"\n{ShipName} fick motorproblem! Hastighet sänkt till {Speed} km/h.");
+                    return;
                 }
             }
+            if (chance == 1)        // asynce
+                await Task.Delay(15000);
+            else if (chance <= 3)
+                await Task.Delay(10000);
+            else if (chance <= 9)
+                await Task.Delay(5000);
         }
     }
 }

@@ -2,7 +2,7 @@
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             //t1.Name = "X-Wing";
             //t2.Name = "Millenium Falcon";
@@ -19,8 +19,8 @@
                 t2,
                 t3
             };
-            Race race = new Race();
-            Race.StartRace(ships);
+
+            await Race.StartRaceAsync(ships);
         }
     }
 }
